@@ -2,9 +2,12 @@
   "type": "module",
   "name": "jobify",
   "version": "1.0.0",
+  "homepage": "https://Shivam-Kumar12.github.io/Jobify",
   "description": "[Jobify](https://jobify.live/)",
   "main": "index.js",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "setup-project": "npm i && cd client && npm i",
     "setup-production-app": "npm i && cd client && npm i && npm run build",
     "server": "nodemon server",
@@ -41,5 +44,8 @@
     "react-toastify": "^9.1.2",
     "recharts": "^2.12.2",
     "safe-buffer": "^5.2.1"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
   }
 }
