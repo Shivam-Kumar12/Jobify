@@ -13,7 +13,7 @@ module.exports = {
         "stream": false,
         "crypto": false,
         "crypto-browserify": require.resolve('crypto-browserify'),
-      // path: require.resolve('path-browserify')
+        path: require.resolve('path-browserify')
     }
   }
 };
