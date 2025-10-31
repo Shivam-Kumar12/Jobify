@@ -16,7 +16,7 @@
     }
   ],
   "env": {
-    "VITE_API_URL": "@vite_api_url"
+    "VITE_API_URL": "https://jobify-pci6osw6m-shivam-kumar12s-projects.vercel.app"
   },
   "functions": {
     "src/pages/**/*.js": {
