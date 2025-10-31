@@ -8,11 +8,11 @@
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "craco start",
+    "build": "craco build",
     "setup-project": "npm i && cd client && npm i",
     "setup-production-app": "npm i && cd client && npm i && npm run build",
-  "server": "nodemon index.js",
+    "server": "nodemon index.js",
     "client": "cd client && npm run dev",
     "dev": "concurrently --kill-others-on-fail \" npm run server\" \" npm run client\""
   },
@@ -50,7 +50,10 @@
     "safe-buffer": "^5.2.1"
   },
   "devDependencies": {
-    "gh-pages": "^6.3.0"
+    "@craco/craco": "^7.1.0",
+    "crypto-browserify": "^3.12.1",
+    "gh-pages": "^6.3.0",
+    "os-browserify": "^0.3.0"
   },
   "browserslist": {
     "production": [
