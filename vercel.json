@@ -1,0 +1,36 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "client/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/client/$1"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production",
+    "MONGO_URL": "@mongo_url",
+    "JWT_SECRET": "@jwt_secret",
+    "JWT_EXPIRES_IN": "@jwt_expires_in",
+    "CLOUD_NAME": "@cloud_name",
+    "CLOUD_API_KEY": "@cloud_api_key",
+    "CLOUD_API_SECRET": "@cloud_api_secret",
+    "PORT": "5100"
+  }
+}
