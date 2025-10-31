@@ -18,12 +18,12 @@
   ],
   "env": {
     "NODE_ENV": "production",
-    "MONGO_URL": "@mongo_url",
-    "JWT_SECRET": "@jwt_secret",
-    "JWT_EXPIRES_IN": "@jwt_expires_in",
-    "CLOUD_NAME": "@cloud_name",
-    "CLOUD_API_KEY": "@cloud_api_key",
-    "CLOUD_API_SECRET": "@cloud_api_secret",
+    "MONGO_URL": "mongodb+srv://shivamkumar:shivamkumar@cluster0.4q9zq.mongodb.net/jobify?retryWrites=true&w=majority",
+    "JWT_SECRET": "secret123",
+    "JWT_EXPIRES_IN": "1d",
+    "CLOUD_NAME": "dyj47k4hq",
+    "CLOUD_API_KEY": "736628839363728",
+    "CLOUD_API_SECRET": "FFbVSyaPZjib8yBbHiEXTcVGfNg",
     "PORT": "5100"
   }
 }
