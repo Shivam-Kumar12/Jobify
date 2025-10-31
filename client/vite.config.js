@@ -7,9 +7,11 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:5100/api",
+        // Proxy all /api requests to the backend server.
+        // Keep the /api prefix so backend routes like /api/v1/* match directly.
+        target: "http://localhost:5100",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""),
+        secure: false,
       },
     },
   },

@@ -1,3 +1,14 @@
+// User applies for a job
+export const applyForJob = async (req, res) => {
+  const job = await Job.findById(req.params.id);
+  if (!job) return res.status(StatusCodes.NOT_FOUND).json({ msg: "Job not found" });
+  if (job.applications && job.applications.includes(req.user.userId)) {
+    return res.status(StatusCodes.BAD_REQUEST).json({ msg: "Already applied" });
+  }
+  job.applications.push(req.user.userId);
+  await job.save();
+  res.status(StatusCodes.OK).json({ msg: "Applied successfully" });
+};
 import Job from '../Models/jobModels.js'
 import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
@@ -12,10 +23,11 @@ import day from "dayjs"
 export const getAllJobs = async (req, res) => {
   const { search, jobStatus, jobType, sort } = req.query;
 
-  const queryObject = {
-    createdBy: req.user.userId
-  };
-
+  // If admin, show all jobs. Otherwise, only jobs created by the user.
+  const queryObject = {};
+  if (!req.user || req.user.role !== 'admin') {
+    queryObject.createdBy = req.user.userId;
+  }
   if (search) {
     queryObject.$or = [
       { position: { $regex: search, $options: "i" } },
@@ -23,7 +35,6 @@ export const getAllJobs = async (req, res) => {
     ];
   }
   if (jobStatus && jobStatus !== "all") {
-
     queryObject.jobStatus = jobStatus;
   }
   if (jobType && jobType !== "all") {
@@ -48,7 +59,8 @@ export const getAllJobs = async (req, res) => {
   const jobs = await Job.find(queryObject)
     .sort(sortKey)
     .skip(skip)
-    .limit(limit);
+    .limit(limit)
+    .populate('applications', 'name email'); // Populate applicant info for admin
 
   const totalJobs = await Job.countDocuments(queryObject);
   const numOfPages = Math.ceil(totalJobs / limit);
@@ -74,16 +86,39 @@ export const getJob = async (req, res) => {
 };
 
 export const updateJob = async (req, res) => {
+  const job = await Job.findById(req.params.id);
+  if (!job) {
+    return res.status(StatusCodes.NOT_FOUND).json({ msg: 'Job not found' });
+  }
+  if (!job.createdBy) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: 'Job is missing creator information' });
+  }
+  if (job.createdBy.toString() !== req.user.userId && req.user.role !== 'admin') {
+    return res.status(StatusCodes.UNAUTHORIZED).json({ msg: 'You do not have permission to update this job' });
+  }
+  // If not admin, prevent changing jobStatus
+  if (req.user.role !== 'admin' && req.body.jobStatus && req.body.jobStatus !== job.jobStatus) {
+    return res.status(StatusCodes.FORBIDDEN).json({ msg: 'Only admin can change job status' });
+  }
   const updatedJob = await Job.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
   });
-
   res.status(StatusCodes.OK).json({ msg: 'job modified', updatedJob });
 };
 
 export const deleteJob = async (req, res) => {
-  const removedJob = await Job.findByIdAndDelete(req.params.id);
-  res.status(StatusCodes.OK).json({ job: removedJob });
+  const job = await Job.findById(req.params.id);
+  if (!job) {
+    return res.status(StatusCodes.NOT_FOUND).json({ msg: 'Job not found' });
+  }
+  if (!job.createdBy) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: 'Job is missing creator information' });
+  }
+  if (job.createdBy.toString() !== req.user.userId && req.user.role !== 'admin') {
+    return res.status(StatusCodes.UNAUTHORIZED).json({ msg: 'You do not have permission to delete this job' });
+  }
+  await job.deleteOne();
+  res.status(StatusCodes.OK).json({ msg: 'Job deleted' });
 };
 
 export const showStats = async (req, res) => {

@@ -7,39 +7,40 @@ import { useContext, createContext } from "react";
 const AllJobsContext = createContext();
 
 export const loader = async ({ request }) => {
-  // console.log(request.userId); // Step 1: Verify Data Fetching
-
   try {
     const params = Object.fromEntries([
       ...new URL(request.url).searchParams.entries()
     ]);
-    // console.log("Params:", params); // Step 2: Check received parameters
-    
     const { data } = await customFetch.get("/jobs", {
       params,
     });
-    // console.log("Data from API:", data); // Step 3: Check data received from API
-    
     return {
       data,
       searchValues: { ...params },
+      error: null,
     };
-    
   } catch (error) {
-    // console.error("Error fetching data:", error);
-    toast.error(error?.response?.data?.msg);
-    return error;
+    // Show actual error message in UI
+    return {
+      data: { jobs: [], totalJobs: 0, numOfPages: 1 },
+      searchValues: {},
+      error: error?.response?.data?.msg || "Something went wrong",
+    };
   }
 };
 
 const AllJobs = () => {
-  const { data, searchValues } = useLoaderData();
-  // console.log("Loader data:", data, "Search values:", searchValues); // Step 4: Check loader data
-  
+  const { data, searchValues, error } = useLoaderData();
   return (
     <AllJobsContext.Provider value={{ data, searchValues }}>
       <SearchContainer />
-      <JobsContainer />
+      {error ? (
+        <div style={{ color: 'red', textAlign: 'center', margin: '2rem' }}>
+          <h2>Error: {error}</h2>
+        </div>
+      ) : (
+        <JobsContainer />
+      )}
     </AllJobsContext.Provider>
   );
 };

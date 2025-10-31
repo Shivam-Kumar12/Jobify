@@ -1,6 +1,6 @@
 import { FormRow, FormSelect,SubmitBtn } from "../components";
 import Wrapper from "../assets/wrappers/DashboardFormPage";
-import { useLoaderData, useParams } from "react-router-dom";
+import { useLoaderData, useOutletContext } from "react-router-dom";
 import { JOB_STATUS, JOB_TYPE } from "../../../utils/Constants.js";
 import { Form, redirect } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -30,11 +30,10 @@ export const action = async ({ request, params }) => {
   }
 };
 const EditJob = () => {
-  
-  // const params = useParams();
   const { job } = useLoaderData();
+  const { user } = useOutletContext();
   // console.log(job);
-  console.log("joblocation:",job.jobLocation);
+  // console.log("joblocation:",job.jobLocation);
 
   return (
     <Wrapper>
@@ -47,32 +46,30 @@ const EditJob = () => {
             defaultValue={job.position}
             labelText="Position"
           />
+
           <FormRow
             type="text"
-            name="company"
-            defaultValue={job.company}
-            labelText="Company"
-          />
-          <FormRow
-            type="text"
-            name="jobLocation" 
+            name="jobLocation"
             defaultValue={job.jobLocation}
             labelText="job Location"
           />
-
-          <FormSelect
-            labelText="job status"
-            name="jobStatus"
-            defaultValue={job.jobStatus}
-            list={Object.values(JOB_STATUS)}
-          />
+          {user && user.role === "admin" ? (
+            <FormSelect
+              labelText="job status"
+              name="jobStatus"
+              defaultValue={job.jobStatus}
+              list={Object.values(JOB_STATUS)}
+            />
+          ) : (
+            <input type="hidden" name="jobStatus" value={job.jobStatus} />
+          )}
           <FormSelect
             name="jobType"
             labelText="job type"
             defaultValue={job.jobType}
             list={Object.values(JOB_TYPE)}
           />
-        <SubmitBtn formBtn/>
+          <SubmitBtn formBtn />
         </div>
       </Form>
     </Wrapper>

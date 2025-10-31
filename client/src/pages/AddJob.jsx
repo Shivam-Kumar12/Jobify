@@ -11,6 +11,10 @@ export const action = async ({ request }) => {
   console.log("Request Object:", request);
   const formData = await request.formData();
   const data = Object.fromEntries(formData.entries());
+  // Always set jobStatus to 'pending' for non-admins
+  if (!data.jobStatus) {
+    data.jobStatus = 'pending';
+  }
   console.log("Form Data:", data);
 
   try {
@@ -47,22 +51,22 @@ const AddJob = () => {
         <h4 className="form-title">Apply job</h4>
         <div className="form-center">
           <FormRow type="text" name="position" />
-          <FormRow type="text" name="company" />
-          {/* <select name="company" id="company"><option value="">Select Company</option>{allCompany.map(company=>{
-            return <option value={company._id}>{company.companyName}</option>
-          })}</select> */}
+
           <FormRow
             type="text"
             labelText="job location"
             name="jobLocation"
             defaultValue={user.location}
           />
-          <FormSelect
-            labelText="job status"
-            name="jobStatus"
-            defaultValue={JOB_STATUS.PENDING}
-            list={Object.values(JOB_STATUS)}
-          />
+          {/* Only show job status select if user is admin */}
+          {user.role === 'admin' && (
+            <FormSelect
+              labelText="job status"
+              name="jobStatus"
+              defaultValue={JOB_STATUS.PENDING}
+              list={Object.values(JOB_STATUS)}
+            />
+          )}
           <FormSelect
             name="jobType"
             labelText="job type"

@@ -10,13 +10,3 @@ export { default as AddJob } from './AddJob';
 export { default as EditJob } from './EditJob';
 export { default as Profile } from './Profile';
 export { default as Admin } from './Admin';
-export { default as CompanyRegistrationForm } from "./CompanyRegistrationForm";
-export { default as CompanyInfo } from "../components/CompanyInfo";
-export { default as AddCompany } from "./AllCompany"
-// export { default as DeleteJob } from './DeleteJob';
-export{default as EditCompany} from "./EditCompany";
-export {default as CompanyLogin} from "./CompanyLogin"
-export {default as AddCompanyJob} from "./AddCompanyJob"
-export {default as AllCompanyJob} from "./AllCompanyJob"
-export {default as EditCompanyJob} from "./EditCompanyJob"
-export {default as CompanyStats} from "./CompanyStats"

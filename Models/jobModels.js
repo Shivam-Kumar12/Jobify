@@ -24,6 +24,10 @@ const JobSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "User"
     },
+    applications: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }],
     
   },
   { timestamps: true }

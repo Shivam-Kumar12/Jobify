@@ -1,3 +1,5 @@
+import { applyForJob } from '../controllers/jobController.js';
+import { authenticateUser } from "../middleware/authMiddleWare.js";
 import { Router } from 'express';
 const router = Router();
 import {
@@ -17,10 +19,14 @@ import { checkForTestUser } from "../middleware/authMiddleWare.js"
 // router.get('/',getAllJobs)
 // router.post('/',createJob)
 
+
 router
   .route('/')
   .get(getAllJobs)
   .post(checkForTestUser, validateJobInput, createJob);
+
+// Endpoint for users to apply for a job
+router.post('/:id/apply', authenticateUser, applyForJob);
 
 router.route('/stats').get(showStats);
 
