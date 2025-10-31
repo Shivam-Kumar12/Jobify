@@ -6,14 +6,13 @@ module.exports = {
       "fs": false,
         "tls": false,
         "net": false,
-        "path": false,
+        "path": require.resolve('path-browserify'),
         "zlib": false,
         "http": false,
         "https": false,
         "stream": false,
         "crypto": false,
-        "crypto-browserify": require.resolve('crypto-browserify'),
-        path: require.resolve('path-browserify')
+        "crypto-browserify": require.resolve('crypto-browserify')
     }
   }
 };
